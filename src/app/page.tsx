@@ -1,15 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Upload,
   Film,
   History,
   Sparkles,
   Play,
   Pause,
   Download,
-  Plus,
   RefreshCw,
   Image as ImageIcon,
   Mic,
@@ -19,8 +17,6 @@ import {
   Layout,
   Edit3,
   Save,
-  Menu,
-  ChevronRight,
   Terminal,
   FileText
 } from "lucide-react";
@@ -126,6 +122,16 @@ const SCRIPT_OPTIONS = [
 
 const VIDEO_DURATION = 140;
 
+interface EngineConfig {
+  voiceSynthesis: boolean;
+  eraStyling: boolean;
+  archiveSpidering: boolean;
+  livingHeritage: boolean;
+  notarizedVault: boolean;
+  era: string;
+  fidelity: number;
+}
+
 export default function Dashboard() {
   const [status, setStatus] = useState<"idle" | "uploading" | "analyzing" | "scripting" | "generating" | "complete">("idle");
   const [globalProgress, setGlobalProgress] = useState(0);
@@ -141,7 +147,7 @@ export default function Dashboard() {
   const [showArchive, setShowArchive] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [engineConfig, setEngineConfig] = useState({
+  const [engineConfig, setEngineConfig] = useState<EngineConfig>({
     voiceSynthesis: true,
     eraStyling: true,
     archiveSpidering: false,
@@ -150,8 +156,6 @@ export default function Dashboard() {
     era: "1900s",
     fidelity: 85
   });
-
-  const playbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleUpload = () => {
     setStatus("uploading");
@@ -568,7 +572,7 @@ export default function Dashboard() {
                                 </div>
                               </motion.div>
                             ) : (
-                              <p className="text-[10px] text-slate-500 font-medium leading-relaxed italic border-l-2 border-gold/10 pl-3">"{scene.caption}"</p>
+                              <p className="text-[10px] text-slate-500 font-medium leading-relaxed italic border-l-2 border-gold/10 pl-3">&quot;{scene.caption}&quot;</p>
                             )}
                           </AnimatePresence>
                         </div>
@@ -978,12 +982,13 @@ export default function Dashboard() {
                       { id: "notarizedVault", label: "Blockchain Notarization", icon: CheckCircle2 },
                     ].map((item) => {
                       const Icon = item.icon;
-                      const active = (engineConfig as any)[item.id];
+                      const configId = item.id as keyof EngineConfig;
+                      const active = engineConfig[configId] as boolean;
                       return (
                         <div
                           key={item.id}
                           className="flex items-center justify-between group cursor-pointer"
-                          onClick={() => setEngineConfig({ ...engineConfig, [item.id]: !active })}
+                          onClick={() => setEngineConfig({ ...engineConfig, [configId]: !active })}
                         >
                           <div className="flex items-center gap-3">
                             <Icon className={cn("w-4 h-4 transition-all", active ? "text-gold" : "text-slate-700")} />
@@ -1041,7 +1046,7 @@ export default function Dashboard() {
                 <section className="space-y-6">
                   <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest border-l-4 border-blue-600 pl-4">Institutional Abstract</h3>
                   <div className="p-8 bg-slate-50 rounded-2xl text-[13px] leading-relaxed text-slate-600 font-medium italic shadow-inner">
-                    "This document serves as the primary historical record of the Tata Iron and Steel Company (TISCO), established in 1907. It tracks the evolution from a singular dream in the jungles of India to a global powerhouse defining the modern industrial age."
+                    &quot;This document serves as the primary historical record of the Tata Iron and Steel Company (TISCO), established in 1907. It tracks the evolution from a singular dream in the jungles of India to a global powerhouse defining the modern industrial age.&quot;
                   </div>
                 </section>
 
