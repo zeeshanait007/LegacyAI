@@ -18,7 +18,8 @@ import {
   Edit3,
   Save,
   Terminal,
-  FileText
+  FileText,
+  LucideIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx, type ClassValue } from "clsx";
@@ -28,16 +29,21 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Tata Steel Heritage Scenes with Real Asset Paths
-const INITIAL_TATA_STEEL_SCENES = [
+// Heritage Scenes with Real Asset Paths
+const INITIAL_HERITAGE_SCENES: Scene[] = [
   {
     id: 1,
     title: "The Visionary Dream (1907)",
     description: "Founding of TISCO by Jamsetji Tata",
     caption: "Sir Dorabji Tata fulfills his father's dream, establishing India's first steel plant in the jungles of Sakchi.",
-    status: "idle" as "idle" | "loading" | "ready",
+    status: "idle",
     timestamp: 0,
-    image: "/assets/tata/tata_founding_1907_1773071872422.png"
+    image: "/assets/tata/tata_founding_1907_1773071872422.png",
+    motion: {
+      parallax: { x: 20, y: 10, scale: 1.15 },
+      particles: "dust" as const,
+      objects: [{ icon: "History", label: "Founding Vision", x: 25, y: 40, delay: 2 }]
+    }
   },
   {
     id: 2,
@@ -46,16 +52,26 @@ const INITIAL_TATA_STEEL_SCENES = [
     caption: "The first steel ingot is rolled, marking India's entry into the global industrial revolution.",
     status: "idle",
     timestamp: 20,
-    image: "/assets/tata/tata_first_ingot_1912_1773071893816.png"
+    image: "/assets/tata/tata_first_ingot_1912_1773071893816.png",
+    motion: {
+      parallax: { x: -15, y: -5, scale: 1.1 },
+      particles: "embers" as const,
+      objects: [{ icon: "Sparkles", label: "Molten Steel", x: 60, y: 50, delay: 1.5 }]
+    }
   },
   {
     id: 3,
     title: "Social Pioneering (1920)",
     description: "Legacy of Welfare",
-    caption: "Tata Steel introduces the 8-hour workday and leave-with-pay, decades before they become global standards.",
+    caption: "The Enterprise introduces the 8-hour workday and leave-with-pay, decades before they become global standards.",
     status: "idle",
     timestamp: 45,
-    image: "/assets/tata/tata_welfare_1920s_1773071976811.png"
+    image: "/assets/tata/tata_welfare_1920s_1773071976811.png",
+    motion: {
+      parallax: { x: 10, y: 15, scale: 1.05 },
+      particles: "dust" as const,
+      objects: [{ icon: "CheckCircle2", label: "Welfare Charter", x: 30, y: 30, delay: 3 }]
+    }
   },
   {
     id: 4,
@@ -64,16 +80,26 @@ const INITIAL_TATA_STEEL_SCENES = [
     caption: "Supplying 23,000 tonnes of steel for the iconic Howrah Bridge, a testament to enduring strength.",
     status: "idle",
     timestamp: 70,
-    image: "/assets/tata/tata_howrah_bridge_1940s_1773071912965.png"
+    image: "/assets/tata/tata_howrah_bridge_1940s_1773071912965.png",
+    motion: {
+      parallax: { x: 0, y: -20, scale: 1.2 },
+      particles: "dust" as const,
+      objects: [{ icon: "Layout", label: "Structural Core", x: 50, y: 40, delay: 2.5 }]
+    }
   },
   {
     id: 5,
     title: "Global Reach (2007)",
     description: "Corus Acquisition",
-    caption: "Tata Steel goes global, acquiring Corus Group and becoming one of the top ten steelmakers worldwide.",
+    caption: "The Enterprise goes global, acquiring international partners and becoming one of the top ten industry leaders worldwide.",
     status: "idle",
     timestamp: 95,
-    image: "/assets/tata/tata_global_modern_plant_1773071934794.png"
+    image: "/assets/tata/tata_global_modern_plant_1773071934794.png",
+    motion: {
+      parallax: { x: -20, y: 10, scale: 1.1 },
+      particles: "digital" as const,
+      objects: [{ icon: "Settings", label: "Global Network", x: 70, y: 30, delay: 2 }]
+    }
   },
   {
     id: 6,
@@ -82,7 +108,12 @@ const INITIAL_TATA_STEEL_SCENES = [
     caption: "Pioneering hydrogen-ready pipes and carbon-neutral steel for a cleaner, greener planet.",
     status: "idle",
     timestamp: 120,
-    image: "/assets/tata/tata_green_steel_future_1773071956870.png"
+    image: "/assets/tata/tata_green_steel_future_1773071956870.png",
+    motion: {
+      parallax: { x: 15, y: -10, scale: 1.25 },
+      particles: "digital" as const,
+      objects: [{ icon: "Sparkles", label: "Clean Emission", x: 40, y: 60, delay: 3 }]
+    }
   }
 ];
 
@@ -91,7 +122,7 @@ In the heart of the wilderness, a dream began to solidify. 1907. Sakchi. A place
 
 [SCENE #1: THE DREAM]
 (Visual: Sepia-toned wilderness, blueprints unfurling)
-Jamsetji's spirit lived in every brick laid. The Tata Iron and Steel Company was born, a beacon of self-reliance.
+Jamsetji's spirit lived in every brick laid. The Founding Enterprise was born, a beacon of self-reliance.
 
 [SCENE #2: THE FIRST INGOT]
 (Visual: Molten metal, 1912)
@@ -103,11 +134,11 @@ Jamsetji's spirit lived in every brick laid. The Tata Iron and Steel Company was
 
 [SCENE #4: STRENGTH IN ADVERSITY]
 (Visual: Howrah Bridge construction)
-War. Depression. The bridge that held the nation together was made of Tata Steel. Every rivet, a promise of endurance.
+War. Depression. The bridge that held the nation together was made of Heritage Steel. Every rivet, a promise of endurance.
 
 [SCENE #5: GLOBAL ASCENT]
 (Visual: Modern plant, global horizon)
-2007. The acquisition of Corus. From the banks of the Hooghly to the shores of Europe, Tata Steel became a global force, proving that excellence knows no borders.
+2007. Global expansion. From local roots to the shores of Europe, the Enterprise became a global force, proving that excellence knows no borders.
 
 [SCENE #6: THE HORIZON]
 (Visual: Green steel facility, clean energy)
@@ -124,18 +155,41 @@ const SCRIPT_OPTIONS = [
   {
     id: "impact",
     title: "Nation Builder",
-    desc: "How Tata Steel became the backbone of India's identity.",
+    desc: "How the Enterprise became the backbone of national identity.",
     prompt: "Focus on the strategic importance of steel production in post-independence India, emphasizing nation-building projects like the Howrah Bridge and the role of steel in industrial self-reliance."
   },
   {
     id: "human",
     title: "People First",
     desc: "A narrative centered on ethical leadership and welfare.",
-    prompt: "Highlight the pioneering social welfare initiatives of Tata Steel, specifically the 8-hour workday, leave with pay, and the holistic development of Jamshedpur as a model industrial township."
+    prompt: "Highlight the pioneering social welfare initiatives of the Enterprise, specifically the 8-hour workday, leave with pay, and the holistic development of the industrial township."
   }
 ];
 
 const VIDEO_DURATION = 140;
+
+interface MotionObject {
+  icon: string;
+  label: string;
+  x: number;
+  y: number;
+  delay: number;
+}
+
+interface Scene {
+  id: number;
+  title: string;
+  description: string;
+  caption: string;
+  status: "idle" | "loading" | "ready";
+  timestamp: number;
+  image: string;
+  motion?: {
+    parallax: { x: number; y: number; scale: number };
+    particles: "embers" | "dust" | "digital" | "none";
+    objects: MotionObject[];
+  };
+}
 
 interface EngineConfig {
   voiceSynthesis: boolean;
@@ -147,13 +201,138 @@ interface EngineConfig {
   fidelity: number;
 }
 
+const ParticleField = ({ type }: { type: "embers" | "dust" | "digital" | "none" }) => {
+  const [particles] = useState(() =>
+    Array.from({ length: 40 }).map(() => ({ // Increased to 40
+      width: Math.random() * 6 + 2, // Larger
+      height: Math.random() * 6 + 2,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      duration: Math.random() * 3 + 2, // Much faster
+      delay: Math.random() * 2,
+      yDest: -150 - Math.random() * 300,
+      xDest: (Math.random() - 0.5) * 100,
+    }))
+  );
+
+  if (type === "none") return null;
+  const color = type === "embers" ? "bg-orange-600/70" : type === "dust" ? "bg-gold/50" : "bg-blue-300/60"; // Higher opacity
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      {particles.map((p, i) => (
+        <motion.div
+          key={i}
+          className={cn("absolute rounded-full blur-[1px]", color)}
+          style={{ width: p.width, height: p.height, left: p.left, top: p.top }}
+          animate={{
+            y: [0, p.yDest],
+            x: [0, p.xDest],
+            opacity: [0, 1, 0.4, 0],
+            scale: [1, 2, 0.5]
+          }}
+          transition={{ duration: p.duration, repeat: Infinity, ease: "linear", delay: p.delay }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const LivingDiorama = ({ scene, isPlaying }: { scene: Scene; isPlaying: boolean }) => {
+  if (!scene.motion) return <img src={scene.image} className="w-full h-full object-cover grayscale brightness-75" alt="Scene" />;
+
+  const { parallax, particles, objects } = scene.motion;
+  const ICON_MAP: Record<string, LucideIcon> = { History, Sparkles, CheckCircle2, Layout, Settings };
+
+  return (
+    <div className="relative w-full h-full overflow-hidden bg-black rounded-[inherit]">
+      {/* Background Layer: Slow Dramatic Drift */}
+      <motion.img
+        src={scene.image}
+        className="absolute inset-x-[-30%] inset-y-[-30%] w-[160%] h-[160%] object-cover grayscale brightness-[0.4] blur-[4px] scale-150"
+        animate={{
+          x: isPlaying ? [-parallax.x * 2, parallax.x * 2] : [-parallax.x / 2, parallax.x / 2],
+          y: isPlaying ? [-parallax.y * 2, parallax.y * 2] : [-parallax.y / 2, parallax.y / 2],
+        }}
+        transition={{ duration: isPlaying ? 12 : 30, repeat: Infinity, repeatType: "mirror", ease: "linear" }}
+        alt="Background"
+      />
+
+      {/* Midground Layer: Extreme Ken Burns */}
+      <motion.img
+        src={scene.image}
+        className="absolute inset-[-20%] w-[140%] h-[140%] object-cover grayscale brightness-[0.8] contrast-150 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+        animate={{
+          x: isPlaying ? [parallax.x * 3, -parallax.x * 3] : [0, 5],
+          y: isPlaying ? [parallax.y * 3, -parallax.y * 3] : [0, 5],
+          scale: isPlaying ? [1.2, 1.2 + (parallax.scale - 1) * 3] : 1.2
+        }}
+        transition={{ duration: isPlaying ? 15 : 40, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+        alt="Midground"
+      />
+
+      <ParticleField type={particles} />
+
+      {/* Neural Entities Overlay: High Impact Presence */}
+      {objects.map((obj, idx) => {
+        const Icon = ICON_MAP[obj.icon] || Sparkles;
+        return (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, scale: 0, y: 50 }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              x: isPlaying ? [25, -25, 25] : [5, -5, 5],
+              y: isPlaying ? [-25, 25, -25] : [-5, 5, -5]
+            }}
+            transition={{
+              delay: obj.delay,
+              duration: 2.0,
+              x: { duration: isPlaying ? 6 : 12, repeat: Infinity, ease: "easeInOut" },
+              y: { duration: isPlaying ? 8 : 15, repeat: Infinity, ease: "easeInOut" }
+            }}
+            className="absolute z-20 pointer-events-none"
+            style={{ left: `${obj.x}%`, top: `${obj.y}%` }}
+          >
+            <div className="flex flex-col items-center gap-3">
+              <motion.div
+                animate={isPlaying ? { y: [0, -10, 0], scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] } : {}}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="w-14 h-14 rounded-2xl bg-black/80 border-2 border-gold/50 backdrop-blur-3xl flex items-center justify-center text-gold shadow-[0_0_50px_rgba(212,175,55,0.4)] ring-2 ring-white/10"
+              >
+                <Icon className="w-7 h-7" />
+                <motion.div className="absolute inset-0 border-2 border-gold/40 rounded-2xl" animate={{ opacity: [0.4, 1.0, 0.4], scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 4 }} />
+              </motion.div>
+              <div className="bg-black/95 px-4 py-2 rounded-xl border border-gold/20 backdrop-blur-2xl shadow-2xl">
+                <span className="text-[10px] font-black text-gold uppercase tracking-[0.3em] whitespace-nowrap drop-shadow-md">
+                  {obj.label}
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
+
+      {/* Neural Active Badge */}
+      <div className="absolute top-6 left-6 z-40 flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-md rounded-full border border-gold/20 shadow-2xl">
+        <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse shadow-[0_0_10px_rgba(212,175,55,1)]" />
+        <span className="text-[8px] font-black text-gold/80 uppercase tracking-widest">Neural Motion Active</span>
+      </div>
+
+      {/* Cinematic Vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.7)_100%)] pointer-events-none z-30 opacity-60" />
+    </div>
+  );
+};
+
 export default function Dashboard() {
   const [status, setStatus] = useState<"idle" | "uploading" | "analyzing" | "scripting" | "generating" | "complete">("idle");
   const [globalProgress, setGlobalProgress] = useState(0);
   const [selectedScript, setSelectedScript] = useState<string | null>(null);
   const [showScript, setShowScript] = useState(false);
 
-  const [scenes, setScenes] = useState(INITIAL_TATA_STEEL_SCENES);
+  const [scenes, setScenes] = useState<Scene[]>(INITIAL_HERITAGE_SCENES);
   const [masterScript, setMasterScript] = useState(INITIAL_FULL_SCRIPT);
   const [editingSceneId, setEditingSceneId] = useState<number | null>(null);
 
@@ -198,7 +377,7 @@ export default function Dashboard() {
         if (s.id === sceneId) {
           return {
             ...s,
-            status: "ready",
+            status: "ready" as const,
             caption: s.caption + " (Refined for cinematic impact.)"
           };
         }
@@ -429,13 +608,26 @@ export default function Dashboard() {
               <div className="space-y-2">
                 {SCRIPT_OPTIONS.map((opt) => (
                   <div key={opt.id} className="space-y-2">
-                    <button
-                      disabled={status === "idle" || status === "uploading" || status === "analyzing"}
-                      onClick={() => setSelectedScript(opt.id)}
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => {
+                        if (!(status === "idle" || status === "uploading" || status === "analyzing")) {
+                          setSelectedScript(opt.id);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          if (!(status === "idle" || status === "uploading" || status === "analyzing")) {
+                            setSelectedScript(opt.id);
+                          }
+                        }
+                      }}
                       className={cn(
-                        "w-full p-4 rounded-xl border text-left transition-all relative overflow-hidden group shadow-sm",
+                        "w-full p-4 rounded-xl border text-left transition-all relative overflow-hidden group shadow-sm cursor-pointer",
                         selectedScript === opt.id ? "border-gold/40 bg-gold/[0.05]" : "border-slate-800 bg-slate-900/30 hover:border-slate-700",
-                        (status === "idle" || status === "uploading" || status === "analyzing") && "opacity-20 grayscale"
+                        (status === "idle" || status === "uploading" || status === "analyzing") && "opacity-20 grayscale cursor-not-allowed"
                       )}
                     >
                       <div className="flex items-center justify-between mb-2">
@@ -446,15 +638,19 @@ export default function Dashboard() {
                               e.stopPropagation();
                               setShowPromptId(showPromptId === opt.id ? null : opt.id);
                             }}
-                            className="p-1 rounded-md hover:bg-gold/10 text-slate-600 hover:text-gold transition-colors"
+                            className={cn(
+                              "p-1.5 rounded-lg transition-all duration-300",
+                              showPromptId === opt.id ? "bg-gold/20 text-gold shadow-[0_0_10px_rgba(212,175,55,0.2)]" : "text-slate-600 hover:text-gold hover:bg-gold/10"
+                            )}
+                            title="Show Engine Prompt"
                           >
-                            <Sparkles className="w-3 h-3" />
+                            <Sparkles className="w-3.5 h-3.5" />
                           </button>
                         </div>
                         {selectedScript === opt.id && <div className="w-1.5 h-1.5 bg-gold rounded-full shadow-[0_0_8px_rgba(212,175,55,1)]" />}
                       </div>
                       <p className="text-[10px] text-slate-500 leading-relaxed font-medium">{opt.desc}</p>
-                    </button>
+                    </div>
 
                     <AnimatePresence>
                       {showPromptId === opt.id && (
@@ -568,7 +764,7 @@ export default function Dashboard() {
                               </motion.div>
                             </div>
                           ) : scene.status === "ready" ? (
-                            <img src={scene.image} alt={scene.title} className="w-full h-full object-cover contrast-125 brightness-75 grayscale hover:grayscale-0 transition-all duration-700" />
+                            <LivingDiorama scene={scene} isPlaying={false} />
                           ) : (
                             <Clock className="w-7 h-7 text-slate-900 m-auto mt-8" />
                           )}
@@ -644,7 +840,7 @@ export default function Dashboard() {
               >
                 <div className="relative z-10 flex items-center justify-center gap-3">
                   <Sparkles className="w-4 h-4" />
-                  {status === "generating" ? "Synthesizing Heritage Sequence..." : status === "complete" ? "Master Export Primed" : "Initiate Tata Steel Synthesis"}
+                  {status === "generating" ? "Synthesizing Heritage Sequence..." : status === "complete" ? "Master Export Primed" : "Initiate Heritage Synthesis"}
                 </div>
                 {status === "generating" && (
                   <motion.div
@@ -716,17 +912,18 @@ export default function Dashboard() {
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     className="absolute inset-0 flex items-center justify-center bg-black"
                   >
-                    {/* Cinematic Visual Feed */}
-                    <AnimatePresence mode="wait">
-                      <motion.img
+                    {/* Cinematic Visual Feed: Living Diorama Engine */}
+                    <AnimatePresence>
+                      <motion.div
                         key={activeSceneIdx}
-                        src={scenes[activeSceneIdx].image}
-                        initial={{ opacity: 0, scale: 1.2, filter: "blur(20px)" }}
-                        animate={{ opacity: 0.8, scale: 1, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, transition: { duration: 0.8 } }}
+                        initial={{ opacity: 0, filter: "blur(20px)" }}
+                        animate={{ opacity: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, transition: { duration: 1.0 } }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
-                        className="absolute inset-0 w-full h-full object-cover grayscale brightness-75"
-                      />
+                        className="absolute inset-0"
+                      >
+                        <LivingDiorama scene={scenes[activeSceneIdx]} isPlaying={isPlaying} />
+                      </motion.div>
                     </AnimatePresence>
 
                     {/* Dramatic Overlays */}
@@ -744,7 +941,7 @@ export default function Dashboard() {
                         initial={{ width: 0 }} animate={{ width: "auto" }}
                         className="text-[9px] text-gold font-black tracking-[0.5em] uppercase border-b border-gold/40 pb-1"
                       >
-                        TATA STEEL • HERITAGE ARCHIVE
+                        HISTORIC • HERITAGE ARCHIVE
                       </motion.span>
                       <h4 className="text-3xl font-serif font-bold text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] px-10 italic">
                         {scenes[activeSceneIdx].title}
@@ -885,21 +1082,19 @@ export default function Dashboard() {
             </div>
 
             <div className="flex-1 relative rounded-3xl overflow-hidden border border-gold/20 bg-black shadow-[0_0_100px_rgba(212,175,55,0.1)] group">
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 {scenes[activeSceneIdx] && (
                   <motion.div
                     key={scenes[activeSceneIdx].id}
                     initial={{ opacity: 0, scale: 1.1 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
+                    exit={{ opacity: 0, scale: 0.95, transition: { duration: 1.0 } }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
                     className="absolute inset-0"
                   >
-                    <img
-                      src={scenes[activeSceneIdx].image}
-                      className="w-full h-full object-cover contrast-110 brightness-90 shadow-2xl"
-                      alt="Cinematic Preview"
-                    />
+                    <div className="absolute inset-0">
+                      <LivingDiorama scene={scenes[activeSceneIdx]} isPlaying={isPlaying} />
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-12 lg:p-20 flex flex-col justify-end">
                       <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -907,7 +1102,7 @@ export default function Dashboard() {
                         className="max-w-3xl space-y-6"
                       >
                         <span className="text-[10px] text-gold font-black tracking-[0.5em] uppercase border-b border-gold/40 pb-2 inline-block">
-                          TATA STEEL HERITAGE PRODUCTION
+                          CINEMATIC HERITAGE PRODUCTION
                         </span>
                         <h1 className="text-5xl lg:text-7xl font-serif font-bold text-white italic leading-tight">
                           {scenes[activeSceneIdx].title}
