@@ -115,9 +115,24 @@ Today, the mission continues. Hydrogen. Sustainability. Green Steel. Because the
 `;
 
 const SCRIPT_OPTIONS = [
-  { id: "heritage", title: "The Century of Steel", desc: "A deep dive into founding principles and the rise of Jamshedpur." },
-  { id: "impact", title: "Nation Builder", desc: "How Tata Steel became the backbone of India's identity." },
-  { id: "human", title: "People First", desc: "A narrative centered on ethical leadership and welfare." }
+  {
+    id: "heritage",
+    title: "The Century of Steel",
+    desc: "A deep dive into founding principles and the rise of Jamshedpur.",
+    prompt: "Generate a historical narrative focusing on the early 20th-century industrial revolution in India, highlighting the challenges of the Sakchi wilderness and the fulfillment of Jamsetji's vision."
+  },
+  {
+    id: "impact",
+    title: "Nation Builder",
+    desc: "How Tata Steel became the backbone of India's identity.",
+    prompt: "Focus on the strategic importance of steel production in post-independence India, emphasizing nation-building projects like the Howrah Bridge and the role of steel in industrial self-reliance."
+  },
+  {
+    id: "human",
+    title: "People First",
+    desc: "A narrative centered on ethical leadership and welfare.",
+    prompt: "Highlight the pioneering social welfare initiatives of Tata Steel, specifically the 8-hour workday, leave with pay, and the holistic development of Jamshedpur as a model industrial township."
+  }
 ];
 
 const VIDEO_DURATION = 140;
@@ -145,6 +160,7 @@ export default function Dashboard() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [showArchive, setShowArchive] = useState(false);
+  const [showPromptId, setShowPromptId] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [engineConfig, setEngineConfig] = useState<EngineConfig>({
@@ -412,22 +428,54 @@ export default function Dashboard() {
               </div>
               <div className="space-y-2">
                 {SCRIPT_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.id}
-                    disabled={status === "idle" || status === "uploading" || status === "analyzing"}
-                    onClick={() => setSelectedScript(opt.id)}
-                    className={cn(
-                      "w-full p-4 rounded-xl border text-left transition-all relative overflow-hidden group shadow-sm",
-                      selectedScript === opt.id ? "border-gold/40 bg-gold/[0.05]" : "border-slate-800 bg-slate-900/30 hover:border-slate-700",
-                      (status === "idle" || status === "uploading" || status === "analyzing") && "opacity-20 grayscale"
-                    )}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-[10px] font-black text-white uppercase tracking-widest">{opt.title}</p>
-                      {selectedScript === opt.id && <div className="w-1.5 h-1.5 bg-gold rounded-full shadow-[0_0_8px_rgba(212,175,55,1)]" />}
-                    </div>
-                    <p className="text-[10px] text-slate-500 leading-relaxed font-medium">{opt.desc}</p>
-                  </button>
+                  <div key={opt.id} className="space-y-2">
+                    <button
+                      disabled={status === "idle" || status === "uploading" || status === "analyzing"}
+                      onClick={() => setSelectedScript(opt.id)}
+                      className={cn(
+                        "w-full p-4 rounded-xl border text-left transition-all relative overflow-hidden group shadow-sm",
+                        selectedScript === opt.id ? "border-gold/40 bg-gold/[0.05]" : "border-slate-800 bg-slate-900/30 hover:border-slate-700",
+                        (status === "idle" || status === "uploading" || status === "analyzing") && "opacity-20 grayscale"
+                      )}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <p className="text-[10px] font-black text-white uppercase tracking-widest">{opt.title}</p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowPromptId(showPromptId === opt.id ? null : opt.id);
+                            }}
+                            className="p-1 rounded-md hover:bg-gold/10 text-slate-600 hover:text-gold transition-colors"
+                          >
+                            <Sparkles className="w-3 h-3" />
+                          </button>
+                        </div>
+                        {selectedScript === opt.id && <div className="w-1.5 h-1.5 bg-gold rounded-full shadow-[0_0_8px_rgba(212,175,55,1)]" />}
+                      </div>
+                      <p className="text-[10px] text-slate-500 leading-relaxed font-medium">{opt.desc}</p>
+                    </button>
+
+                    <AnimatePresence>
+                      {showPromptId === opt.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-4 rounded-xl bg-slate-950/50 border border-gold/10 mb-2">
+                            <p className="text-[8px] font-black text-gold/60 uppercase tracking-widest mb-2 flex items-center gap-2">
+                              <Terminal className="w-2.5 h-2.5" /> Engine Prompt
+                            </p>
+                            <p className="text-[9px] text-slate-400 font-mono leading-relaxed italic">
+                              &ldquo;{opt.prompt}&rdquo;
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 ))}
               </div>
             </div>
