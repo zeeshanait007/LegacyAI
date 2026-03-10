@@ -330,7 +330,7 @@ export default function Dashboard() {
 
         <div className="flex items-center gap-6">
           <div className="flex flex-col items-end">
-            <span className="text-[10px] font-bold text-white">Tata Steel Ltd.</span>
+            <span className="text-[10px] font-bold text-white">Demo</span>
             <span className="text-[9px] text-gold/60 font-medium">Enterprise License</span>
           </div>
           <div className="w-10 h-10 rounded-full border-2 border-gold/20 p-0.5 shadow-xl">
@@ -466,7 +466,7 @@ export default function Dashboard() {
                   <Film className="w-5 h-5 text-gold" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-black text-white uppercase tracking-[0.1em]">Tata Steel Storyboard</h2>
+                  <h2 className="text-sm font-black text-white uppercase tracking-[0.1em]">Storyboard</h2>
                   <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-0.5">Production Status: {status === "complete" ? "Verified" : status === "generating" ? "Synthesizing" : "Standby"}</p>
                 </div>
               </div>
