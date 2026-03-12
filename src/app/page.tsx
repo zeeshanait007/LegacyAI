@@ -145,7 +145,7 @@ War. Depression. The bridge that held the nation together was made of Heritage S
 Today, the mission continues. Hydrogen. Sustainability. Green Steel. Because the legacy we leave behind is as important as the strength we forge today.
 `;
 
-const SCRIPT_OPTIONS = [
+const NARRATIVE_THEME_POOL = [
   {
     id: "heritage",
     title: "The Century of Steel",
@@ -163,6 +163,12 @@ const SCRIPT_OPTIONS = [
     title: "People First",
     desc: "A narrative centered on ethical leadership and welfare.",
     prompt: "Highlight the pioneering social welfare initiatives of the Enterprise, specifically the 8-hour workday, leave with pay, and the holistic development of the industrial township."
+  },
+  {
+    id: "innovation",
+    title: "Future Forge",
+    desc: "Technological leaps and sustainable industrialization.",
+    prompt: "A forward-looking script focusing on R&D, green steel initiatives, and the digital transformation of the heritage facilities."
   }
 ];
 
@@ -331,6 +337,7 @@ export default function Dashboard() {
   const [globalProgress, setGlobalProgress] = useState(0);
   const [selectedScript, setSelectedScript] = useState<string | null>(null);
   const [showScript, setShowScript] = useState(false);
+  const [narrativeThemes, setNarrativeThemes] = useState<typeof NARRATIVE_THEME_POOL>([]);
 
   const [scenes, setScenes] = useState<Scene[]>(INITIAL_HERITAGE_SCENES);
   const [masterScript, setMasterScript] = useState(INITIAL_FULL_SCRIPT);
@@ -354,6 +361,7 @@ export default function Dashboard() {
 
   const handleUpload = () => {
     setStatus("uploading");
+    setNarrativeThemes([]);
     let p = 0;
     const interval = setInterval(() => {
       p += 1.5;
@@ -361,10 +369,13 @@ export default function Dashboard() {
       if (p >= 100) {
         clearInterval(interval);
         setStatus("analyzing");
+
+        // Simulated AI Theme Generation
         setTimeout(() => {
+          setNarrativeThemes(NARRATIVE_THEME_POOL.slice(0, 3));
           setStatus("scripting");
           setGlobalProgress(0);
-        }, 1500);
+        }, 2000);
       }
     }, 40);
   };
@@ -606,7 +617,13 @@ export default function Dashboard() {
                 )}
               </div>
               <div className="space-y-2">
-                {SCRIPT_OPTIONS.map((opt) => (
+                {narrativeThemes.length === 0 && (status === "idle" || status === "uploading" || status === "analyzing") && (
+                  <div className="p-8 border border-dashed border-slate-800 rounded-xl text-center space-y-2 opacity-40">
+                    <Sparkles className="w-5 h-5 text-slate-700 mx-auto" />
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-slate-600">Waiting for Data Ingestion</p>
+                  </div>
+                )}
+                {narrativeThemes.map((opt) => (
                   <div key={opt.id} className="space-y-2">
                     <div
                       role="button"
